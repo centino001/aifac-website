@@ -13,12 +13,107 @@ class CloudinaryHelper
     const IMAGES = [
         'hero-bg' => 'v1757681837/ibibio_dancer_1_amxghj.jpg',
         'projects-hero' => 'v1757681837/ibibio_dancer_1_amxghj.jpg', // Using same image for now, can be changed later
+        'news-hero' => 'v1757681837/ibibio_dancer_1_amxghj.jpg', // Using same image for now, can be changed later
+        'about-hero' => 'v1757681837/ibibio_dancer_1_amxghj.jpg', // Using same image for now, can be changed later
         'project-1' => 'v1757681838/project_image_1_abc123.jpg',
         'project-2' => 'v1757681839/project_image_2_def456.jpg',
         'team-photo' => 'v1757681840/team_building_ghi789.jpg',
         'about-bg' => 'v1757681841/about_background_jkl012.jpg',
         // Add more images as you upload them
     ];
+
+    /**
+     * Upload file to Cloudinary
+     */
+    public static function uploadFile($file, $folder = null, $options = [])
+    {
+        try {
+            // Validate file before upload
+            if (!$file || !$file->isValid()) {
+                throw new \Exception('Invalid file provided for upload');
+            }
+
+            // Check file size (max 10MB)
+            if ($file->getSize() > 10485760) {
+                throw new \Exception('File size exceeds maximum limit of 10MB');
+            }
+
+            $uploadOptions = array_merge([
+                'quality' => 'auto',
+                'format' => 'auto',
+                'resource_type' => 'auto', // Handles images, videos, etc.
+            ], $options);
+
+            if ($folder) {
+                $uploadOptions['folder'] = $folder;
+            }
+
+            $result = Cloudinary::upload($file->getRealPath(), $uploadOptions);
+            
+            if (!$result || !$result->getSecurePath()) {
+                throw new \Exception('Cloudinary upload failed - no secure path returned');
+            }
+            
+            return $result->getSecurePath();
+        } catch (\Exception $e) {
+            \Log::error('Cloudinary upload failed', [
+                'error' => $e->getMessage(),
+                'file_name' => $file ? $file->getClientOriginalName() : 'unknown',
+                'file_size' => $file ? $file->getSize() : 'unknown',
+                'folder' => $folder
+            ]);
+            throw new \Exception('Failed to upload file to Cloudinary: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Upload image for projects
+     */
+    public static function uploadProjectImage($file)
+    {
+        return self::uploadFile($file, 'aifac/projects', [
+            'transformation' => [
+                'quality' => 'auto',
+                'format' => 'auto',
+                'width' => 1200,
+                'height' => 800,
+                'crop' => 'limit'
+            ]
+        ]);
+    }
+
+    /**
+     * Upload image for people/team
+     */
+    public static function uploadPersonImage($file)
+    {
+        return self::uploadFile($file, 'aifac/people', [
+            'transformation' => [
+                'quality' => 'auto',
+                'format' => 'auto',
+                'width' => 600,
+                'height' => 600,
+                'crop' => 'fill',
+                'gravity' => 'face'
+            ]
+        ]);
+    }
+
+    /**
+     * Upload image for news
+     */
+    public static function uploadNewsImage($file)
+    {
+        return self::uploadFile($file, 'aifac/news', [
+            'transformation' => [
+                'quality' => 'auto',
+                'format' => 'auto',
+                'width' => 1200,
+                'height' => 800,
+                'crop' => 'limit'
+            ]
+        ]);
+    }
 
     /**
      * Get image path by friendly name

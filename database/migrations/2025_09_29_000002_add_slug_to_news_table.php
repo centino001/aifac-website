@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->boolean('is_admin')->default(false)->after('email_verified_at');
+        Schema::table('news', function (Blueprint $table) {
+            $table->string('slug')->unique()->after('title');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('is_admin');
+        Schema::table('news', function (Blueprint $table) {
+            $table->dropColumn('slug');
         });
     }
 };

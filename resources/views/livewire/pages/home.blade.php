@@ -1,32 +1,197 @@
 <div>
-    <!-- Hero Section -->
-    <section class="relative  text-white py-20 overflow-hidden">
-        <!-- Background Image with Opacity -->
-        <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40" 
-             style="background-image: url('{{ \App\Helpers\CloudinaryHelper::heroImage('hero-bg') }}');">
+    <!-- Hero Multimedia Slider Section -->
+    <section class="relative overflow-hidden hero-slider" style="height: 80vh; min-height: 600px;">
+        <!-- Slides Container -->
+        <div class="relative w-full h-full">
+            @foreach($slides as $index => $slide)
+                <div class="absolute inset-0 transition-opacity duration-1000 {{ $currentSlide === $index ? 'opacity-100' : 'opacity-0' }}"
+                     wire:key="slide-{{ $index }}">
+                    
+                    @if($slide['type'] === 'video')
+                        <!-- Video Slide -->
+                        <video 
+                            class="w-full h-full object-cover"
+                            autoplay 
+                            muted 
+                            loop
+                            playsinline
+                            onended="window.livewire.find('{{ $this->getId() }}').call('nextSlide')"
+                            {{ $currentSlide === $index ? '' : 'style=display:none' }}
+                        >
+                            <source src="{{ $slide['src'] }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    @else
+                        <!-- Image Slide -->
+                        <div class="w-full h-full bg-cover bg-center bg-no-repeat"
+                             style="background-image: url('{{ $slide['src'] }}')">
         </div>
+                    @endif
         
         <!-- Content Overlay -->
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
-                    Building a Better Tomorrow
+                    <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                        <div class="text-center text-white px-4 max-w-4xl mx-auto">
+                            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 drop-shadow-lg">
+                                {{ $slide['title'] }}
                 </h1>
-                <p class="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-white drop-shadow-md">
-                    Empowering communities through innovative projects and sustainable initiatives. 
-                    Join us in creating positive change that lasts.
+                            <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl mb-8 max-w-3xl mx-auto drop-shadow-md">
+                                {{ $slide['description'] }}
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a href="/projects" class="bg-orange-600 text-black px-8 py-3 rounded-lg font-semibold hover:bg-orange-700 transition duration-150 shadow-lg">
+                                 <a href="/projects" class="bg-orange-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-700 transition duration-300 text-lg shadow-lg">
                         View Our Projects
                     </a>
-                    <a href="/donate" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-black transition duration-150 shadow-lg">
+                                 {{-- <button onclick="openDonationTypeModal()" class="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-black transition duration-300 text-lg shadow-lg">
                         Make a Donation
-                    </a>
+                                 </button> --}}
+                             </div>
+                        </div>
+                    </div>
                 </div>
+            @endforeach
+        </div>
+        
+        <!-- Navigation Arrows -->
+        <button wire:click="previousSlide" 
+                class="absolute left-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 hover:bg-opacity-75 rounded-full p-4 transition-all z-20 group">
+            <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </button>
+        
+        <button wire:click="nextSlide"
+                class="absolute right-4 top-1/2 transform -translate-y-1/2 text-white bg-black bg-opacity-50 hover:bg-opacity-75 rounded-full p-4 transition-all z-20 group">
+            <svg class="w-6 h-6 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+        </button>
+        
+        <!-- Slide Indicators -->
+        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex space-x-3 z-20">
+            @foreach($slides as $index => $slide)
+                <button wire:click="goToSlide({{ $index }})"
+                        class="w-4 h-4 rounded-full transition-all {{ $currentSlide === $index ? 'bg-white scale-110' : 'bg-white bg-opacity-50 hover:bg-opacity-75' }}">
+                </button>
+            @endforeach
             </div>
+        
+        <!-- Progress Bar for Current Slide -->
+        <div class="absolute bottom-16 left-1/2 transform -translate-x-1/2 w-64 bg-white bg-opacity-20 rounded-full h-1 z-20">
+            <div class="bg-white h-full rounded-full transition-all duration-300 slide-progress" 
+                 data-slide-type="{{ $slides[$currentSlide]['type'] ?? 'image' }}"
+                 data-duration="{{ $slides[$currentSlide]['duration'] ?? 5000 }}"></div>
         </div>
     </section>
+
+    <!-- Auto-advance and Progress JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let autoSlideTimer;
+            let progressTimer;
+            let progressBar;
+            
+            function updateProgressBar() {
+                progressBar = document.querySelector('.slide-progress');
+                if (!progressBar) return;
+                
+                const slideType = progressBar.getAttribute('data-slide-type');
+                const duration = parseInt(progressBar.getAttribute('data-duration'));
+                
+                // Reset progress
+                progressBar.style.width = '0%';
+                progressBar.style.transition = 'none';
+                
+                // Start progress animation for images
+                if (slideType === 'image') {
+                    setTimeout(() => {
+                        progressBar.style.transition = `width ${duration}ms linear`;
+                        progressBar.style.width = '100%';
+                    }, 50);
+                }
+            }
+            
+            function startAutoSlide() {
+                clearInterval(autoSlideTimer);
+                clearTimeout(progressTimer);
+                
+                // Update progress bar
+                updateProgressBar();
+                
+                // Auto-advance timer for images only
+                const currentSlideData = @json($slides)[@this.currentSlide];
+                if (currentSlideData && currentSlideData.type === 'image') {
+                    progressTimer = setTimeout(() => {
+                        @this.call('nextSlide');
+                    }, currentSlideData.duration);
+                }
+            }
+            
+            function stopAutoSlide() {
+                clearInterval(autoSlideTimer);
+                clearTimeout(progressTimer);
+            }
+            
+            // Initialize
+            startAutoSlide();
+            
+            // Listen for Livewire updates
+            Livewire.on('slideChanged', () => {
+                setTimeout(startAutoSlide, 100);
+            });
+            
+            // Restart timer when slide changes
+            document.addEventListener('livewire:updated', function() {
+                setTimeout(startAutoSlide, 100);
+            });
+            
+            // Pause on hover
+            const heroSlider = document.querySelector('.hero-slider');
+            if (heroSlider) {
+                heroSlider.addEventListener('mouseenter', stopAutoSlide);
+                heroSlider.addEventListener('mouseleave', startAutoSlide);
+            }
+        });
+    </script>
+
+    <!-- Mobile Responsive Styles -->
+    <style>
+        .hero-slider {
+            background: #000;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .hero-slider {
+                height: 70vh;
+                min-height: 500px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-slider {
+                height: 60vh;
+                min-height: 400px;
+            }
+        }
+        
+        /* Landscape mobile */
+        @media (max-width: 767px) and (orientation: landscape) {
+            .hero-slider {
+                height: 100vh;
+                min-height: 400px;
+            }
+        }
+        
+        /* Enhanced hover effects */
+        .hero-slider button:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Smooth video transitions */
+        .hero-slider video {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
 
     <!-- Our Mission Section -->
     <section class="py-16 bg-black">
@@ -97,7 +262,7 @@
             
             <!-- Project Cards Placeholder -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-8">
-                <div class="bg-black rounded-lg shadow-md overflow-hidden border border-gray-700">
+                {{-- <div class="bg-black rounded-lg shadow-md overflow-hidden border border-gray-700">
                     <div class="h-48 bg-gradient-to-br from-blue-400 to-blue-600"></div>
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-white mb-2">Clean Water Initiative</h3>
@@ -107,21 +272,21 @@
                             <a href="#" class="text-blue-400 hover:text-blue-300 font-medium">Learn More</a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 
                 <div class="bg-black rounded-lg shadow-md overflow-hidden border border-gray-700">
-                    <div class="h-48 bg-gradient-to-br from-green-400 to-green-600"></div>
+                    <div class="h-48 bg-cover bg-center bg-no-repeat" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1759218155/ekonke_b8v34s.jpg')"></div>
                     <div class="p-6">
-                        <h3 class="text-xl font-semibold text-white mb-2">Education for All</h3>
-                        <p class="text-gray-300 mb-4">Building schools and providing educational resources to children in rural areas.</p>
+                        <h3 class="text-xl font-semibold text-white mb-2">Ekonke</h3>
+                        <p class="text-gray-300 mb-4">Story telling and folklore</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-sm text-green-400 font-medium">₦1,800,000 raised</span>
-                            <a href="#" class="text-green-400 hover:text-green-300 font-medium">Learn More</a>
+                            {{-- <span class="text-sm text-green-400 font-medium">₦1,800,000 raised</span> --}}
+                            <a href="/projects/ekonke" class="text-green-400 hover:text-green-300 font-medium">Learn More</a>
                         </div>
                     </div>
                 </div>
                 
-                <div class="bg-black rounded-lg shadow-md overflow-hidden border border-gray-700">
+                {{-- <div class="bg-black rounded-lg shadow-md overflow-hidden border border-gray-700">
                     <div class="h-48 bg-gradient-to-br from-purple-400 to-purple-600"></div>
                     <div class="p-6">
                         <h3 class="text-xl font-semibold text-white mb-2">Healthcare Access</h3>
@@ -131,7 +296,7 @@
                             <a href="#" class="text-purple-400 hover:text-purple-300 font-medium">Learn More</a>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
             
             <div class="text-center">
@@ -143,7 +308,7 @@
     </section>
 
     <!-- News Section -->
-    <section class="py-16 bg-black">
+    {{-- <section class="py-16 bg-black">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
                 <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Latest News</h2>
@@ -191,7 +356,7 @@
                 </a>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <!-- Coming Soon Section (Conditional) -->
     <section class="py-16 bg-black text-white">
@@ -201,9 +366,9 @@
                 We're working on an exciting new initiative that will transform how we approach community development. 
                 Stay tuned for updates!
             </p>
-            <a href="/membership" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition duration-150">
+            {{-- <a href="/membership" class="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-lg font-semibold transition duration-150">
                 Join Our Community
-            </a>
+            </a> --}}
         </div>
     </section>
 </div>

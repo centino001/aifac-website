@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('projects', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('image_url')->nullable();
             $table->longText('description');
-            $table->boolean('is_donation')->default(false);
-            $table->decimal('goal', 15, 2)->nullable();
+            $table->json('images')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->boolean('accepts_donations')->default(false);
+            $table->decimal('goals', 15, 2)->nullable()->comment('Fundraising goal in Naira');
             $table->timestamps();
+            $table->softDeletes(); // Add soft deletes
         });
     }
 

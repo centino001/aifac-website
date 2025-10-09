@@ -2,19 +2,62 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Project extends Model
 {
-    protected $fillable = ['name', 'image_url', 'description', 'is_donation', 'goal'];
+    use HasFactory, SoftDeletes;
 
-    public function donations()
+    protected $fillable = [
+        'name',
+        'description',
+        'images',
+        'is_active',
+        'accepts_donations',
+        'goals',
+    ];
+
+    protected $casts = [
+        'images' => 'array',
+        'is_active' => 'boolean',
+        'accepts_donations' => 'boolean',
+        'goals' => 'decimal:2',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
+
+    public function getFirstImageAttribute()
     {
-        return $this->hasMany(Donation::class);
+        $images = $this->images;
+        
+        // Ensure images is an array and has items
+        if (is_array($images) && count($images) > 0) {
+            return $images[0];
+        }
+        
+        return null;
     }
 
-    public function volunteers()
+    public function getFormattedGoalsAttribute()
     {
-        return $this->hasMany(Volunteer::class);
+        if (!$this->goals) {
+            return null;
+        }
+        
+        return '₦' . number_format($this->goals, 2);
+    }
+
+    public function getGoalsInNairaAttribute()
+    {
+        return $this->goals ? $this->goals : 0;
+    }
+
+    public function getImageCountAttribute()
+    {
+        $images = $this->images;
+        return is_array($images) ? count($images) : 0;
     }
 }

@@ -16,7 +16,9 @@ return new class extends Migration
             $table->string('title');
             $table->longText('content');
             $table->json('images')->nullable();
+            $table->date('published_date')->default(now());
             $table->timestamps();
+            $table->softDeletes(); // Add soft deletes
         });
     }
 

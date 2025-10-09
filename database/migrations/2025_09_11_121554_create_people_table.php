@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('position');
-            $table->enum('category', ['expert_advisors', 'board_of_directors', 'core_team']);
+            $table->string('category');
+            $table->string('linkedin_url')->nullable();
+            $table->string('image_url')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

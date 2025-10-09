@@ -1,14 +1,12 @@
 <header class="bg-black shadow-lg sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
+        <div class="flex justify-between items-center h-24">
             <!-- Logo Section -->
             <div class="flex-shrink-0 flex items-center">
                 <a href="/" class="flex items-center">
                     <!-- Logo placeholder - replace with actual logo -->
-                    <div class="h-10 w-10 bg-orange-600 rounded-lg flex items-center justify-center">
-                        <span class="text-white font-bold text-xl">L</span>
-                    </div>
-                    <span class="ml-2 text-xl font-bold text-white hidden sm:block">{{ config('app.name', 'LiveWire') }}</span>
+                    <img src="https://res.cloudinary.com/dgsctl247/image/upload/v1758843914/aifac_logo_nloews.png" alt="Anyen Iyak Foundation Logo" class="h-24 w-24 md:h-28 md:w-28 object-contain transition-transform hover:scale-105 border-0">
+                    {{-- <span class="ml-4 text-xl md:text-2xl font-bold text-white hidden sm:block">{{ config('app.name', 'LiveWire') }}</span> --}}
                 </a>
             </div>
 
@@ -22,21 +20,21 @@
                     <a href="/projects" class="text-gray-300 hover:text-orange-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150">
                         Projects
                     </a>
-                    <a href="/news" class="text-gray-300 hover:text-orange-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150">
+                    {{-- <a href="/news" class="text-gray-300 hover:text-orange-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150">
                         News
-                    </a>
-                    <a href="/people" class="text-gray-300 hover:text-orange-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150">
+                    </a> --}}
+                    {{-- <a href="/people" class="text-gray-300 hover:text-orange-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150">
                         People
                     </a>
                     <a href="/membership" class="text-gray-300 hover:text-orange-400 px-3 py-2 rounded-md text-sm font-medium transition duration-150">
                         Membership
-                    </a>
+                    </a> --}}
                 </nav>
                 
                 <!-- Donate Button - Close to Right Edge -->
-                <a href="/donate" class="bg-orange-600 hover:bg-orange-700 text-black px-6 py-2 rounded-md text-sm font-bold transition duration-150">
+                {{-- <button onclick="openDonationTypeModal()" class="bg-orange-600 hover:bg-orange-700 text-black px-6 py-2 rounded-md text-sm font-bold transition duration-150">
                     DONATE
-                </a>
+                </button> --}}
             </div>
 
             <!-- Mobile menu button -->
@@ -59,18 +57,18 @@
                 <a href="/projects" class="text-gray-300 hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium">
                     Projects
                 </a>
-                <a href="/news" class="text-gray-300 hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium">
+                {{-- <a href="/news" class="text-gray-300 hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium">
                     News
-                </a>
-                <a href="/people" class="text-gray-300 hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium">
+                </a> --}}
+                {{-- <a href="/people" class="text-gray-300 hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium">
                     People
-                </a>
-                <a href="/membership" class="text-gray-300 hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium">
+                </a> --}}
+                {{-- <a href="/membership" class="text-gray-300 hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium">
                     Membership
-                </a>
-                <a href="/donate" class="bg-orange-600 text-black block px-3 py-2 rounded-md text-base font-medium">
+                </a> --}}
+                {{-- <button onclick="openDonationTypeModal()" class="bg-orange-600 text-black block px-3 py-2 rounded-md text-base font-medium w-full text-left">
                     Donate
-                </a>
+                </button> --}}
             </div>
         </div>
     </div>

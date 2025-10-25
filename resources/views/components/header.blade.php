@@ -5,7 +5,7 @@
             <div class="flex-shrink-0 flex items-center">
                 <a href="/" class="flex items-center">
                     <!-- Logo placeholder - replace with actual logo -->
-                    <img src="https://res.cloudinary.com/dgsctl247/image/upload/v1758843914/aifac_logo_nloews.png" alt="Anyen Iyak Foundation Logo" class="h-24 w-24 md:h-28 md:w-28 object-contain transition-transform hover:scale-105 border-0">
+                    <img src="https://res.cloudinary.com/dgsctl247/image/upload/v1758843914/aifac_logo_nloews.png" alt="Anyen Iyak Foundation Logo" class="h-12 w-12 md:h-14 md:w-14 object-contain transition-transform hover:scale-105 border-0">
                     {{-- <span class="ml-4 text-xl md:text-2xl font-bold text-white hidden sm:block">{{ config('app.name', 'LiveWire') }}</span> --}}
                 </a>
             </div>
@@ -32,9 +32,9 @@
                 </nav>
                 
                 <!-- Donate Button - Close to Right Edge -->
-                {{-- <button onclick="openDonationTypeModal()" class="bg-orange-600 hover:bg-orange-700 text-black px-6 py-2 rounded-md text-sm font-bold transition duration-150">
+                <button onclick="openDonationTypeModal()" class="bg-orange-600 hover:bg-orange-700 text-black px-6 py-2 rounded-md text-sm font-bold transition duration-150">
                     DONATE
-                </button> --}}
+                </button>
             </div>
 
             <!-- Mobile menu button -->
@@ -66,9 +66,9 @@
                 {{-- <a href="/membership" class="text-gray-300 hover:text-blue-400 block px-3 py-2 rounded-md text-base font-medium">
                     Membership
                 </a> --}}
-                {{-- <button onclick="openDonationTypeModal()" class="bg-orange-600 text-black block px-3 py-2 rounded-md text-base font-medium w-full text-left">
+                <button onclick="openDonationTypeModal()" class="bg-orange-600 text-black block px-3 py-2 rounded-md text-base font-medium w-full text-left">
                     Donate
-                </button> --}}
+                </button>
             </div>
         </div>
     </div>

@@ -8,7 +8,7 @@
                 </svg>
             </div>
             <h1 class="text-3xl font-bold text-white mb-2">Payment Successful!</h1>
-            <p class="text-gray-300">Thank you for your generous donation</p>
+            <p class="text-gray-300">SOSONGO KE UNWAM MFO!!!</p>
         </div>
 
         <!-- Transaction Details Card -->
@@ -73,7 +73,7 @@
 
         <!-- Thank You Message -->
         <div class="bg-gradient-to-r from-orange-600 to-orange-700 rounded-lg p-6 mb-6">
-            <h3 class="text-lg font-semibold text-white mb-2">Thank You, {{ $name }}!</h3>
+            <h3 class="text-lg font-semibold text-white mb-2">Sosongo, {{ $name }}!</h3>
             <p class="text-orange-100 text-sm">
                 Your donation will help us preserve and promote African art and culture. 
                 A receipt has been sent to <strong>{{ $email }}</strong>.

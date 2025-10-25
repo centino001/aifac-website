@@ -15,6 +15,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         ]);
+        
+        // Exclude Flutterwave webhook from CSRF verification
+        $middleware->validateCsrfTokens(except: [
+            'payment/webhook',
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         // Handle authentication exceptions for admin routes

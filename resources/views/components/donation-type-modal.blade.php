@@ -35,7 +35,7 @@
                 </button>
 
                 <!-- Donate to Project Option -->
-                <button onclick="selectProjectDonation()" class="w-full bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg transition-colors duration-300 flex items-center justify-between group">
+                {{-- <button onclick="selectProjectDonation()" class="w-full bg-gray-700 hover:bg-gray-600 text-white p-4 rounded-lg transition-colors duration-300 flex items-center justify-between group">
                     <div class="flex items-center">
                         <div class="bg-gray-600 p-2 rounded-full mr-4">
                             <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -50,7 +50,7 @@
                     <svg class="w-5 h-5 text-gray-300 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                     </svg>
-                </button>
+                </button> --}}
             </div>
         </div>
 

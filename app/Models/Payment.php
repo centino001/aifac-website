@@ -12,9 +12,9 @@ class Payment extends Model
 
     protected $fillable = [
         'reference_number',
-        'paystack_reference',
-        'paystack_access_code',
-        'paystack_transaction_id',
+        'payment_reference',
+        'payment_link',
+        'payment_transaction_id',
         'donor_name',
         'donor_email',
         'donor_phone',
@@ -27,7 +27,7 @@ class Payment extends Model
         'payment_method',
         'payment_channel',
         'paid_at',
-        'paystack_response',
+        'payment_response',
         'authorization_code',
         'card_type',
         'last4',
@@ -50,7 +50,7 @@ class Payment extends Model
         'paid_at' => 'datetime',
         'receipt_sent_at' => 'datetime',
         'refunded_at' => 'datetime',
-        'paystack_response' => 'array',
+        'payment_response' => 'array',
         'metadata' => 'array',
         'receipt_sent' => 'boolean',
         'refunded' => 'boolean',
@@ -133,12 +133,12 @@ class Payment extends Model
     /**
      * Mark payment as successful
      */
-    public function markAsSuccessful(array $paystackData = []): void
+    public function markAsSuccessful(array $flutterwaveData = []): void
     {
         $this->update([
             'status' => 'successful',
             'paid_at' => now(),
-            'paystack_response' => $paystackData,
+            'payment_response' => $paymentData,
         ]);
     }
 

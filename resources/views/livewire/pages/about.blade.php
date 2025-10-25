@@ -129,7 +129,8 @@
                     The principles that guide our work and define our commitment to cultural preservation and artistic excellence.
                 </p>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+            <!-- First Row: 3 Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-6 sm:mb-8">
                 <!-- Teamwork -->
                 <div class="bg-black rounded-lg p-6 border border-gray-700 text-center">
                     <div class="bg-green-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -168,31 +169,36 @@
                         Our Actions Are Built On Honesty And Transparency, Earning Us Trust Through Consistent Integrity.
                     </p>
                 </div>
+            </div>
 
-                <!-- Mutual Respect -->
-                <div class="bg-black rounded-lg p-6 border border-gray-700 text-center">
-                    <div class="bg-yellow-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 8H17M7 8C4.79086 8 3 9.79086 3 12V17C3 19.2091 4.79086 21 7 21H8C10.2091 21 12 19.2091 12 17V12C12 9.79086 10.2091 8 8 8H7ZM7 8V7C7 4.79086 8.79086 3 11 3H12M17 8C19.2091 8 21 9.79086 21 12V17C21 19.2091 19.2091 21 17 21H16C13.7909 21 12 19.2091 12 17V12C12 9.79086 13.7909 8 16 8H17ZM17 8V7C17 4.79086 15.2091 3 13 3H12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
+            <!-- Second Row: 2 Cards Centered -->
+            <div class="flex justify-center">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 max-w-3xl">
+                    <!-- Mutual Respect -->
+                    <div class="bg-black rounded-lg p-6 border border-gray-700 text-center">
+                        <div class="bg-yellow-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 8H17M7 8C4.79086 8 3 9.79086 3 12V17C3 19.2091 4.79086 21 7 21H8C10.2091 21 12 19.2091 12 17V12C12 9.79086 10.2091 8 8 8H7ZM7 8V7C7 4.79086 8.79086 3 11 3H12M17 8C19.2091 8 21 9.79086 21 12V17C21 19.2091 19.2091 21 17 21H16C13.7909 21 12 19.2091 12 17V12C12 9.79086 13.7909 8 16 8H17ZM17 8V7C17 4.79086 15.2091 3 13 3H12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Mutual Respect</h3>
+                        <p class="text-gray-300 text-sm">
+                            Fostering mutual respect among diverse cultural groups to promote harmony and collaboration in the African art and culture ecosystem.
+                        </p>
                     </div>
-                    <h3 class="text-lg font-semibold text-white mb-2">Mutual Respect</h3>
-                    <p class="text-gray-300 text-sm">
-                        Fostering mutual respect among diverse cultural groups to promote harmony and collaboration in the African art and culture ecosystem.
-                    </p>
-                </div>
 
-                <!-- Resilience -->
-                <div class="bg-black rounded-lg p-6 border border-gray-700 text-center">
-                    <div class="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                        </svg>
+                    <!-- Resilience -->
+                    <div class="bg-black rounded-lg p-6 border border-gray-700 text-center">
+                        <div class="bg-red-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-white mb-2">Resilience</h3>
+                        <p class="text-gray-300 text-sm">
+                            Challenges Are Opportunities For Growth, So We Face Them Head-On While Staying Focused On Our Mission.
+                        </p>
                     </div>
-                    <h3 class="text-lg font-semibold text-white mb-2">Resilience</h3>
-                    <p class="text-gray-300 text-sm">
-                        Challenges Are Opportunities For Growth, So We Face Them Head-On While Staying Focused On Our Mission.
-                    </p>
                 </div>
             </div>
         </div>
@@ -219,61 +225,120 @@
                 <div class="overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4">
                     <div class="flex gap-4 lg:gap-6">
                         <!-- Board Member 1 -->
-                        <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700">
-                            <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1755792516/people/tqgwamyc3uacwlxt17bg.jpg')">
+                        <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700 group">
+                            <div class="h-80 bg-cover bg-no-repeat relative overflow-hidden" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1760006193/michelle_gwfazs.jpg'); background-position: center 30%;">
                                 <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+                                
+                                <!-- Bio Overlay - Only covers image area -->
+                                <div class="absolute inset-0 bg-orange-600 bg-opacity-70 transform translate-y-full group-hover:translate-y-0 transition-all duration-500 ease-in-out flex items-center justify-center p-6">
+                                    <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
+                                        <h4 class="text-lg font-bold text-white mb-3">Michele Trimarchi</h4>
+                                        <p class="text-sm text-white leading-relaxed text-justify">
+                                            Michele Trimarchi, Ph.D., is professor of Public Economics (Magna Graecia Catanzaro), teaches Cultural Economics (IUAV Venice) and Arts Management (IED Florence). He has extensively published on cultural economics and policy.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="p-3 lg:p-4">
                                 <h4 class="text-base lg:text-lg font-semibold text-white mb-1">Michele Trimarchi</h4>
                                 {{-- <p class="text-orange-400 text-xs font-medium mb-2">Chairman, Board of Directors</p> --}}
                                
-                                {{-- <div class="flex space-x-2">
-                                    <a href="#" class="text-blue-400 hover:text-blue-300">
+                                 <div class="flex space-x-2">
+                                    <a href="https://www.linkedin.com/in/michele-trimarchi-5767776/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 relative z-10">
                                         <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                                         </svg>
                                     </a>
-                                </div> --}}
+                                 </div>
                             </div>
                         </div>
 
                         <!-- Board Member 2 -->
-                        <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700">
-                            <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1755792253/people/i29nyloiovn9ppmuans7.jpg')">
+                        <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700 group">
+                            <div class="h-80 bg-cover bg-center bg-no-repeat relative overflow-hidden" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1760006191/aisha_vx2ose.jpg')">
                                 <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+                                
+                                <!-- Bio Overlay - Only covers image area -->
+                                <div class="absolute inset-0 bg-orange-600 bg-opacity-70 transform translate-y-full group-hover:translate-y-0 transition-all duration-500 ease-in-out flex items-center justify-center p-6">
+                                    <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
+                                        <h4 class="text-lg font-bold text-white mb-3">Aisha Aliyu-Bima</h4>
+                                        <p class="text-sm text-white leading-relaxed text-justify">
+                                            Writer, curator, photographer, researcher, and archivist with a keen interest in Northern Nigerian Social Anthropology.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="p-3 lg:p-4">
                                 <h4 class="text-base lg:text-lg font-semibold text-white mb-1">Aisha Aliyu-Bima</h4>
                                 {{-- <p class="text-orange-400 text-xs font-medium mb-2">Vice Chairman</p> --}}
-                                {{-- <div class="flex space-x-2">
-                                    <a href="#" class="text-blue-400 hover:text-blue-300">
+                                <div class="flex space-x-2">
+                                    <a href="https://www.linkedin.com/in/aisha-aliyu-bima-696a83287/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300">
                                         <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                                         </svg>
                                     </a>
-                                </div> --}}
+                                </div>
                             </div>
                         </div>
 
                         <!-- Board Member 3 -->
-                        {{--
-                        <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700">
-                            <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1755792253/people/i29nyloiovn9ppmuans7.jpg')">
+                        
+                        <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700 group">
+                            <div class="h-80 bg-cover bg-center bg-no-repeat relative overflow-hidden" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1760006191/victor_oq8f8u.jpg')">
                                 <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+                                
+                                <!-- Bio Overlay - Only covers image area -->
+                                <div class="absolute inset-0 bg-orange-600 bg-opacity-70 transform translate-y-full group-hover:translate-y-0 transition-all duration-500 ease-in-out flex items-center justify-center p-6">
+                                    <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
+                                        <h4 class="text-lg font-bold text-white mb-3">Victor Ekpuk</h4>
+                                        <p class="text-sm text-white leading-relaxed text-justify">
+                                            Victor Ekpuk is an internationally renowned Nigerian-American artist based in Washington, D.C. His paintings, drawings, and sculptures reimagine the aesthetics of ancient Nigerian graphic communication system.
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                             <div class="p-3 lg:p-4">
-                                <h4 class="text-base lg:text-lg font-semibold text-white mb-1">Clive Allanso </h4>
+                                <h4 class="text-base lg:text-lg font-semibold text-white mb-1">Victor Ekpuk</h4>
                                 {{-- <p class="text-orange-400 text-xs font-medium mb-2">Board Member</p> --}}
-                                {{-- <div class="flex space-x-2">
-                                    <a href="#" class="text-blue-400 hover:text-blue-300">
+                                <div class="flex space-x-2">
+                                    <a href="https://www.linkedin.com/in/victorekpuk/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300">
                                         <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
                                         </svg>
                                     </a>
-                                </div> --
+                                </div>
                             </div>
                         </div>
-                    --}}
+                   
+                        <!-- Board Member 4 -->
+                        
+                        <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700 group">
+                            <div class="h-80 bg-cover bg-center bg-no-repeat relative overflow-hidden" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1760006190/clive_v1qr7l.jpg')">
+                                <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+                                
+                                <!-- Bio Overlay - Only covers image area -->
+                                <div class="absolute inset-0 bg-orange-600 bg-opacity-70 transform translate-y-full group-hover:translate-y-0 transition-all duration-500 ease-in-out flex items-center justify-center p-6">
+                                    <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
+                                        <h4 class="text-lg font-bold text-white mb-3">Clive Allanso</h4>
+                                        <p class="text-sm text-white leading-relaxed text-justify">
+                                            Experienced business consultant with a demonstrated history of working on change and efficiency savings in the health wellness and fitness industry.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3 lg:p-4">
+                                <h4 class="text-base lg:text-lg font-semibold text-white mb-1">Clive Allanso</h4>
+                                {{-- <p class="text-orange-400 text-xs font-medium mb-2">Board Member</p> --}}
+                                <div class="flex space-x-2">
+                                    <a href="https://www.linkedin.com/in/cliveallanso/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300">
+                                        <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                   
                     </div>
                 </div>
             </div>
@@ -368,7 +433,7 @@
             </div>
 
             <!-- Expert Advisors -->
-            {{-- <div class="mb-8">
+            <div class="mb-8">
                 <div class="text-center mb-8">
                     <h3 class="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-2">Expert Advisors</h3>
                     <p class="text-gray-300">Specialized consultants providing expertise in various aspects of cultural preservation and artistic development.</p>
@@ -379,16 +444,16 @@
                     <div class="flex gap-4 lg:gap-6">
                         <!-- Advisor 1 -->
                         <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700">
-                            <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1755792253/people/i29nyloiovn9ppmuans7.jpg')">
+                            <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1760006193/louise_ngc3jc.jpg')">
                                 <div class="absolute inset-0 bg-black bg-opacity-20"></div>
                             </div>
                             <div class="p-3 lg:p-4">
-                                <h4 class="text-base lg:text-lg font-semibold text-white mb-1">Dr. Eno Bassey</h4>
-                                <p class="text-orange-400 text-xs font-medium mb-2">Cultural Anthropologist</p>
+                                <h4 class="text-base lg:text-lg font-semibold text-white mb-1">Louise Rytter</h4>
+                                {{-- <p class="text-orange-400 text-xs font-medium mb-2">Cultural Anthropologist</p> --}}
                                 
                             </div>
                         </div>
-
+{{-- 
                         <!-- Advisor 2 -->
                         <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700">
                             <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1755792253/people/i29nyloiovn9ppmuans7.jpg')">
@@ -423,10 +488,10 @@
                                 <p class="text-orange-400 text-xs font-medium mb-2">Community Liaison</p>
                                 
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
-            </div> --}}
+            </div>
         </div>
     </section>
 

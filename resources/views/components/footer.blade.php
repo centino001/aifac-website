@@ -6,7 +6,7 @@
                 <div class="flex-shrink-0 flex items-center">
                     <a href="/" class="flex items-center">
                         <!-- Logo placeholder - replace with actual logo -->
-                        <img src="https://res.cloudinary.com/dgsctl247/image/upload/v1758843914/aifac_logo_nloews.png" alt="Anyen Iyak Foundation Logo" class="h-24 w-24 md:h-28 md:w-28 object-contain transition-transform hover:scale-105 border-0">
+                        <img src="https://res.cloudinary.com/dgsctl247/image/upload/v1758843914/aifac_logo_nloews.png" alt="Anyen Iyak Foundation Logo" class="h-12 w-12 md:h-14 md:w-14 object-contain transition-transform hover:scale-105 border-0">
                         <span class="ml-4 text-xl md:text-2xl font-bold text-white hidden sm:block">{{ config('app.name', 'LiveWire') }}</span>
                     </a>
                 </div>

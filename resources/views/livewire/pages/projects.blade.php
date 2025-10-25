@@ -1,9 +1,9 @@
 <div>
     <!-- Hero Section -->
-    <section class="relative text-white py-12 sm:py-16 md:py-20 overflow-hidden">
+    <section class="relative text-white py-12 sm:py-16 lg:py-0 overflow-hidden lg:h-screen lg:min-h-[600px]">
         <div class="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30"
             style="background-image: url('{{ \App\Helpers\CloudinaryHelper::heroImage('projects-hero') }}');"></div>
-        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 lg:h-full lg:flex lg:items-center lg:justify-center">
             <div class="text-center">
                 <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 drop-shadow-lg">
                     Our Projects

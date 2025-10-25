@@ -21,9 +21,18 @@ Route::get('/projects', Projects::class);
 Route::get('/news', News::class);
 Route::get('/about', About::class);
 Route::get('/payment-gateway', PaymentGateway::class);
-Route::get('/payment-success', PaymentSuccess::class);
+Route::get('/payment-success', PaymentSuccess::class)->name('payment.success');
 Route::get('/projects/{slug}', ProjectDetail::class);
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'store'])->name('newsletter.subscribe');
+
+// Payment routes
+Route::post('/payment/initialize', [\App\Http\Controllers\PaymentController::class, 'initialize'])->name('payment.initialize');
+Route::get('/payment/callback', [\App\Http\Controllers\PaymentController::class, 'callback'])->name('payment.callback');
+Route::post('/payment/webhook', [\App\Http\Controllers\PaymentController::class, 'webhook'])->name('payment.webhook');
+Route::get('/payment/verify/{transactionId}', [\App\Http\Controllers\PaymentController::class, 'verify'])->name('payment.verify');
+Route::get('/payment/failed', function () {
+    return view('livewire.pages.payment-failed');
+})->name('payment.failed');
 
 // Fallback login route (redirects to admin login)
 Route::get('/login', function () {

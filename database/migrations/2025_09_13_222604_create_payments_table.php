@@ -17,10 +17,10 @@ return new class extends Migration
             // Our internal reference system
             $table->string('reference_number')->unique(); // Our generated reference (e.g., AIYAK-2024-001234)
             
-            // Paystack integration fields
-            $table->string('paystack_reference')->nullable(); // Paystack's reference
-            $table->string('paystack_access_code')->nullable(); // Paystack access code
-            $table->string('paystack_transaction_id')->nullable(); // Paystack transaction ID
+            // Flutterwave integration fields
+            $table->string('payment_reference')->nullable(); // Flutterwave's transaction reference (tx_ref)
+            $table->string('payment_link')->nullable(); // Flutterwave payment link
+            $table->string('payment_transaction_id')->nullable(); // Flutterwave transaction ID
             
             // Donor information
             $table->string('donor_name');
@@ -36,12 +36,12 @@ return new class extends Migration
             
             // Payment status and method
             $table->enum('status', ['pending', 'processing', 'successful', 'failed', 'cancelled'])->default('pending');
-            $table->string('payment_method')->nullable(); // card, bank_transfer, ussd, qr, etc.
-            $table->string('payment_channel')->nullable(); // Paystack channel used
+            $table->string('payment_method')->nullable(); // card, bank_transfer, ussd, mobile_money, etc.
+            $table->string('payment_channel')->nullable(); // Flutterwave channel used
             
             // Transaction details
             $table->timestamp('paid_at')->nullable();
-            $table->json('paystack_response')->nullable(); // Store full Paystack response
+            $table->json('payment_response')->nullable(); // Store full Flutterwave response
             $table->string('authorization_code')->nullable(); // For recurring payments
             $table->string('card_type')->nullable(); // visa, mastercard, etc.
             $table->string('last4')->nullable(); // Last 4 digits of card
@@ -69,7 +69,7 @@ return new class extends Migration
             $table->index(['status', 'created_at']);
             $table->index(['donor_email', 'created_at']);
             $table->index(['donation_type', 'project_id']);
-            $table->index('paystack_reference');
+            $table->index('payment_reference');
         });
     }
 

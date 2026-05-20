@@ -13,11 +13,14 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @livewireStyles
+    @stack('styles')
 </head>
 <body class="bg-black text-white font-sans antialiased">
     <div class="min-h-screen">
         {{ $slot }}
     </div>
+    @livewireScripts
 
     <!-- Display Success Messages -->
     @if (session('success'))
@@ -159,5 +162,6 @@
             box-shadow: 0 6px 20px rgba(234, 88, 12, 0.6) !important;
         }
     </style>
+    @stack('scripts')
 </body>
 </html> 

@@ -15,10 +15,13 @@ class NewsletterController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => $validator->errors()->first(),
-            ], 422);
+            if ($request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $validator->errors()->first(),
+                ], 422);
+            }
+            return back()->withInput()->with('error', $validator->errors()->first());
         }
 
         DB::table('newsletters')->insert([
@@ -27,9 +30,12 @@ class NewsletterController extends Controller
             'updated_at' => now(),
         ]);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Thank you for subscribing!',
-        ]);
+        if ($request->wantsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Thank you for subscribing!',
+            ]);
+        }
+        return back()->with('success', 'Thank you for subscribing!');
     }
 }

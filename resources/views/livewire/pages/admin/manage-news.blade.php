@@ -135,70 +135,104 @@
 
         <!-- Content -->
         <main class="flex-1 p-4 lg:p-6 overflow-y-auto">
-            <!-- Add News Form -->
+            <!-- Add/Edit News Form -->
             @if($showForm)
-            <div class="bg-black rounded-lg border border-orange-600 p-4 lg:p-6 mb-6 lg:mb-8">
-                <h3 class="text-lg font-bold text-white mb-4">Create New News Article</h3>
-                <form wire:submit="saveNews" class="space-y-4 lg:space-y-6">
-                    <!-- Title -->
+            <div class="bg-black rounded-lg border border-orange-600 p-4 lg:p-6 mb-6 lg:mb-8" wire:key="news-form-{{ $editingId ?? 'new' }}" x-data="newsForm()" x-init="init()">
+                <h3 class="text-lg font-bold text-white mb-4">{{ $editingId ? 'Edit News Article' : 'Create New News Article' }}</h3>
+                <form @submit.prevent="submitForm" class="space-y-4 lg:space-y-6" id="news-form">
+                    <input type="hidden" id="news-content-input" wire:model="content">
+
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Article Title *</label>
-                        <input wire:model="title" type="text" 
+                        <input wire:model="title" type="text"
                                class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm lg:text-base"
                                placeholder="Enter article title">
                         @error('title') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Content -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Article Content *</label>
-                        <textarea wire:model="content" rows="8" 
-                                  class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm lg:text-base"
-                                  placeholder="Write your article content here... (line breaks will be preserved)"
-                                  style="white-space: pre-wrap;"></textarea>
-                        @error('content') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
-                        <p class="mt-1 text-xs text-gray-500">Tip: Press Enter to create new paragraphs in your article</p>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">URL Slug *</label>
+                        <input wire:model="slug" type="text"
+                               class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm lg:text-base"
+                               placeholder="article-url-slug">
+                        @error('slug') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
+                        <p class="mt-1 text-xs text-gray-500">Used in URL: /news/<span class="text-orange-400">{{ $slug ?: 'your-slug' }}</span></p>
                     </div>
 
-                    <!-- Images Upload -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-2">Article Images</label>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Author</label>
+                        <input wire:model="author" type="text"
+                               class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm lg:text-base"
+                               placeholder="e.g. AIFAC Team">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Article Content *</label>
+                        <div id="quill-editor-{{ $editingId ?? 'new' }}" class="min-h-[240px] bg-gray-800 border border-gray-600 rounded-lg text-gray-200 quill-editor-wrap"></div>
+                        @error('content') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Excerpt (optional)</label>
+                        <textarea wire:model="excerpt" rows="3"
+                                  class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm lg:text-base"
+                                  placeholder="Short summary for listing cards. Leave blank to auto-generate from content."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Categories (comma-separated)</label>
+                        <input wire:model="categoriesInput" type="text"
+                               class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm lg:text-base"
+                               placeholder="e.g. News, Technology, Events">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Featured image (thumbnail)</label>
+                        <input wire:model="thumbnail" type="file" accept="image/*"
+                               class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-600 file:text-white hover:file:bg-orange-700 text-sm lg:text-base">
+                        @error('thumbnail') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
+                        {{-- Preview when user just selected a file --}}
+                        @if($thumbnail && is_object($thumbnail) && method_exists($thumbnail, 'temporaryUrl'))
+                        <p class="mt-2 text-xs text-gray-400">New image selected:</p>
+                        <img src="{{ $thumbnail->temporaryUrl() }}" alt="" class="mt-1 h-32 w-auto max-w-full object-cover rounded border border-gray-600">
+                        @elseif($thumbnail_url)
+                        <p class="mt-2 text-xs text-gray-400">Current:</p>
+                        <img src="{{ $thumbnail_url }}" alt="" class="mt-1 h-32 w-auto max-w-full object-cover rounded border border-gray-600">
+                        @endif
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Additional article images</label>
                         <input wire:model="images" type="file" multiple accept="image/*"
                                class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-orange-600 file:text-white hover:file:bg-orange-700 text-sm lg:text-base">
-                        @error('images') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
-                        
                         @if($images)
                         <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
                             @foreach($images as $index => $image)
                             <div class="relative">
                                 <img src="{{ $image->temporaryUrl() }}" class="h-20 lg:h-24 w-full object-cover rounded-lg border border-gray-600">
-                                <div class="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-                                    {{ $index + 1 }}
-                                </div>
+                                <div class="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">{{ $index + 1 }}</div>
                             </div>
                             @endforeach
                         </div>
                         @endif
                     </div>
 
-                    <!-- Published Date -->
                     <div>
                         <label class="block text-sm font-medium text-gray-300 mb-2">Publication Date *</label>
-                        <input wire:model="published_date" type="date" 
+                        <input wire:model="published_date" type="date"
                                class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm lg:text-base">
                         @error('published_date') <p class="mt-1 text-sm text-red-400">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Submit Button -->
                     <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
                         <button type="button" wire:click="toggleForm"
                                 class="w-full sm:w-auto px-4 lg:px-6 py-2 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition duration-200 text-sm lg:text-base">
                             Cancel
                         </button>
-                        <button type="submit" wire:loading.attr="disabled"
+                        <button type="submit" wire:loading.attr="disabled" wire:target="saveNews"
                                 class="w-full sm:w-auto px-4 lg:px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white rounded-lg transition duration-200 disabled:opacity-50 text-sm lg:text-base">
-                            <span wire:loading.remove>Publish Article</span>
-                            <span wire:loading>Publishing...</span>
+                            <span wire:loading.remove wire:target="saveNews">{{ $editingId ? 'Update Article' : 'Publish Article' }}</span>
+                            <span wire:loading wire:target="saveNews">Uploading...</span>
                         </button>
                     </div>
                 </form>
@@ -214,8 +248,8 @@
                     @foreach($news as $article)
                     <div class="bg-gray-800 rounded-lg overflow-hidden border border-gray-600 hover:border-orange-500 transition duration-200">
                         
-                        @if($article->first_image)
-                        <div class="h-40 lg:h-48 bg-cover bg-center" style="background-image: url('{{ $article->first_image }}')"></div>
+                        @if($article->featured_image)
+                        <div class="h-40 lg:h-48 bg-cover bg-center" style="background-image: url('{{ $article->featured_image }}')"></div>
                         @else
                         <div class="h-40 lg:h-48 bg-gradient-to-br from-blue-500 to-purple-700 flex items-center justify-center">
                             <svg class="h-12 w-12 lg:h-16 lg:w-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -230,18 +264,27 @@
                                 
                                 <!-- Action Buttons -->
                                 <div class="flex items-center space-x-2">
-                                    <button wire:click="showNewsDetails({{ $article->id }})" 
-                                            class="text-blue-400 hover:text-blue-300 transition duration-200 p-1" 
-                                            title="View Details">
+                                    <a href="/news/{{ $article->slug }}" target="_blank" rel="noopener"
+                                       class="text-gray-400 hover:text-white transition duration-200 p-1" title="View on site">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                        </svg>
+                                    </a>
+                                    <button wire:click="editArticle({{ $article->id }})"
+                                            class="text-amber-400 hover:text-amber-300 transition duration-200 p-1" title="Edit">
+                                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                        </svg>
+                                    </button>
+                                    <button wire:click="showNewsDetails({{ $article->id }})"
+                                            class="text-blue-400 hover:text-blue-300 transition duration-200 p-1" title="Preview">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                         </svg>
                                     </button>
-                                    
-                                    <button wire:click="confirmDelete({{ $article->id }})" 
-                                            class="text-red-400 hover:text-red-300 transition duration-200 p-1" 
-                                            title="Delete Article">
+                                    <button wire:click="confirmDelete({{ $article->id }})"
+                                            class="text-red-400 hover:text-red-300 transition duration-200 p-1" title="Delete">
                                         <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                         </svg>
@@ -308,8 +351,8 @@
                 <!-- Content -->
                 <div class="mb-6">
                     <h4 class="text-lg font-semibold text-white mb-3">Article Content</h4>
-                    <div class="bg-gray-800 rounded-lg p-4 border border-gray-600">
-                        <div class="text-gray-300 whitespace-pre-wrap leading-relaxed text-sm lg:text-base">{{ $selectedNews->content }}</div>
+                    <div class="bg-gray-800 rounded-lg p-4 border border-gray-600 prose prose-invert prose-sm max-w-none">
+                        {!! $selectedNews->content !!}
                     </div>
                 </div>
 
@@ -366,4 +409,70 @@
         </div>
     </div>
     @endif
-</div> 
+</div>
+
+@push('styles')
+<link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+<style>
+    .quill-editor-wrap .ql-editor { min-height: 200px; }
+    .quill-editor-wrap .ql-container, .quill-editor-wrap .ql-editor { font-size: 1rem; }
+</style>
+@endpush
+
+@push('scripts')
+<script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+<script>
+document.addEventListener('alpine:init', function() {
+    Alpine.data('newsForm', function() {
+        return {
+            quillInited: false,
+            init() {
+                var self = this;
+                this.$nextTick(function() { self.initQuill(); });
+            },
+            initQuill() {
+                var editorId = 'quill-editor-new';
+                var formEl = document.getElementById('news-form');
+                if (formEl) {
+                    var wrap = formEl.querySelector('[id^="quill-editor-"]');
+                    if (wrap) editorId = wrap.id;
+                }
+                var el = document.getElementById(editorId);
+                if (!el) return;
+                // If this container already has a Quill toolbar, reuse it (don't create a second one)
+                if (el.querySelector('.ql-toolbar')) {
+                    window.quillEditor = Quill.find(el);
+                    var input = document.getElementById('news-content-input');
+                    if (window.quillEditor && input && input.value) {
+                        window.quillEditor.root.innerHTML = input.value;
+                    }
+                    return;
+                }
+                el.innerHTML = '';
+                window.quillEditor = new Quill('#' + editorId, {
+                    theme: 'snow',
+                    placeholder: 'Write your article content...',
+                    modules: {
+                        toolbar: [
+                            [{ header: [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ list: 'ordered'}, { list: 'bullet' }],
+                            ['blockquote', 'link', 'image'],
+                            ['clean']
+                        ]
+                    }
+                });
+                var input = document.getElementById('news-content-input');
+                if (input && input.value) {
+                    window.quillEditor.root.innerHTML = input.value;
+                }
+            },
+            submitForm() {
+                var html = window.quillEditor && window.quillEditor.root ? window.quillEditor.root.innerHTML : '';
+                @this.call('saveNews', html);
+            }
+        };
+    });
+});
+</script>
+@endpush 

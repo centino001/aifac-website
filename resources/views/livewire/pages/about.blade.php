@@ -255,7 +255,7 @@
 
                         <!-- Board Member 2 -->
                         <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700 group">
-                            <div class="h-80 bg-cover bg-center bg-no-repeat relative overflow-hidden" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1760006191/aisha_vx2ose.jpg')">
+                            <div class="h-80 bg-cover bg-center bg-no-repeat relative overflow-hidden" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/e_grayscale/v1760006191/aisha_vx2ose.jpg')">
                                 <div class="absolute inset-0 bg-black bg-opacity-20"></div>
                                 
                                 <!-- Bio Overlay - Only covers image area -->
@@ -313,7 +313,7 @@
                         <!-- Board Member 4 -->
                         
                         <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700 group">
-                            <div class="h-80 bg-cover bg-center bg-no-repeat relative overflow-hidden" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1760006190/clive_v1qr7l.jpg')">
+                            <div class="h-80 bg-cover bg-center bg-no-repeat relative overflow-hidden" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/e_grayscale/v1760006190/clive_v1qr7l.jpg')">
                                 <div class="absolute inset-0 bg-black bg-opacity-20"></div>
                                 
                                 <!-- Bio Overlay - Only covers image area -->
@@ -374,7 +374,7 @@
 
                         <!-- Executive 2 -->
                         <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700">
-                            <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1755815846/people/j4jlngk2dsb2tpreaglc.jpg')">
+                            <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/e_grayscale/v1755815846/people/j4jlngk2dsb2tpreaglc.jpg')">
                                 <div class="absolute inset-0 bg-black bg-opacity-20"></div>
                             </div>
                             <div class="p-3 lg:p-4">
@@ -412,7 +412,7 @@
 
                         <!-- Executive 4 -->
                         <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700">
-                            <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/v1755816064/people/siuoi72zjsjfdptqme8n.jpg')">
+                            <div class="h-80 bg-cover bg-center bg-no-repeat relative" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/e_grayscale/v1755816064/people/siuoi72zjsjfdptqme8n.jpg')">
                                 <div class="absolute inset-0 bg-black bg-opacity-20"></div>
                             </div>
                             <div class="p-3 lg:p-4">

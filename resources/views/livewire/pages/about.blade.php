@@ -222,7 +222,7 @@
                 </div>
                 
                 <!-- Unified Slider for Both Mobile and Desktop -->
-                <div class="overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4">
+                <x-people-carousel>
                     <div class="flex gap-4 lg:gap-6">
                         <!-- Board Member 1 -->
                         <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700 group">
@@ -339,8 +339,39 @@
                             </div>
                         </div>
                    
+                        <!-- Board Member 5 -->
+                        
+                        <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700 group">
+                            <div class="h-80 bg-cover bg-center bg-no-repeat relative overflow-hidden" style="background-image: url('https://res.cloudinary.com/dgsctl247/image/upload/e_grayscale/v1779528711/olivia_djwsr6.jpg')">
+                                <div class="absolute inset-0 bg-black bg-opacity-20"></div>
+                                
+                                <!-- Bio Overlay - Only covers image area -->
+                                <div class="absolute inset-0 bg-orange-600 bg-opacity-70 transform translate-y-full group-hover:translate-y-0 transition-all duration-500 ease-in-out flex items-center justify-center p-6">
+                                    <div class="text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-200">
+                                        <h4 class="text-lg font-bold text-white mb-3">Olivia Umoren Ezeuko</h4>
+                                        <p class="text-sm text-white leading-relaxed text-justify">
+                                            Olivia is a Federal Government Affairs Director in Washington, DC where she develops and maintains relationships with federal agencies and Congressional offices and directs efforts
+                                             to influence aging and health policy. Established in 2017, also the creator of Kaa Di Culture, an Instagram platform and initiative dedicated to preserving Akwa Ibom and Cross River
+                                              culture, language, and history. 
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-3 lg:p-4">
+                                <h4 class="text-base lg:text-lg font-semibold text-white mb-1">Olivia Umoren Ezeuko</h4>
+                                {{-- <p class="text-orange-400 text-xs font-medium mb-2">Board Member</p> --}}
+                                <div class="flex space-x-2">
+                                    <a href="https://www.linkedin.com/in/oliviaumoren/" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300">
+                                        <svg class="w-4 h-4 lg:w-5 lg:h-5" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                                        </svg>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                   
                     </div>
-                </div>
+                </x-people-carousel>
             </div>
 
             <!-- Executive Leadership -->
@@ -351,7 +382,7 @@
                 </div>
                 
                 <!-- Unified Slider for Both Mobile and Desktop -->
-                <div class="overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4">
+                <x-people-carousel>
                     <div class="flex gap-4 lg:gap-6">
                         <!-- Executive 1 -->
                         <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700">
@@ -429,7 +460,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </x-people-carousel>
             </div>
 
             <!-- Expert Advisors -->
@@ -440,7 +471,7 @@
                 </div>
                 
                 <!-- Unified Slider for Both Mobile and Desktop -->
-                <div class="overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4">
+                <x-people-carousel>
                     <div class="flex gap-4 lg:gap-6">
                         <!-- Advisor 1 -->
                         <div class="flex-shrink-0 w-64 lg:w-72 bg-black rounded-lg overflow-hidden shadow-lg border border-gray-700">
@@ -490,7 +521,7 @@
                             </div>
                         </div> --}}
                     </div>
-                </div>
+                </x-people-carousel>
             </div>
         </div>
     </section>
@@ -530,4 +561,44 @@
             scroll-behavior: smooth;
         }
     </style>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('peopleCarousel', () => ({
+                canScrollLeft: false,
+                canScrollRight: false,
+                init() {
+                    this.$nextTick(() => {
+                        this.updateButtons();
+                        window.addEventListener('resize', () => this.updateButtons());
+                    });
+                },
+                scrollNext() {
+                    const track = this.$refs.track;
+                    if (!track) return;
+                    track.scrollBy({ left: this.scrollAmount(track), behavior: 'smooth' });
+                    setTimeout(() => this.updateButtons(), 350);
+                },
+                scrollPrev() {
+                    const track = this.$refs.track;
+                    if (!track) return;
+                    track.scrollBy({ left: -this.scrollAmount(track), behavior: 'smooth' });
+                    setTimeout(() => this.updateButtons(), 350);
+                },
+                scrollAmount(track) {
+                    const card = track.querySelector('.flex-shrink-0');
+                    const row = track.querySelector('.flex');
+                    const gap = row ? parseInt(getComputedStyle(row).gap) || 16 : 16;
+                    return card ? card.offsetWidth + gap : 280;
+                },
+                updateButtons() {
+                    const track = this.$refs.track;
+                    if (!track) return;
+                    const maxScroll = track.scrollWidth - track.clientWidth;
+                    this.canScrollLeft = track.scrollLeft > 8;
+                    this.canScrollRight = maxScroll > 8 && track.scrollLeft < maxScroll - 8;
+                },
+            }));
+        });
+    </script>
 </div>

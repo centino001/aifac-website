@@ -68,3 +68,16 @@ jobs:
             **/storage/framework/sessions/**
             **/storage/framework/views/**
             **/storage/pail/**
+
+      # Needs SSH enabled on the host. Runs only pending migrations (does not drop DB).
+      - name: Run migrations
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: 22
+          script_stop: true
+          script: |
+            cd "${{ secrets.SSH_APP_DIR }}"
+            php artisan migrate --force

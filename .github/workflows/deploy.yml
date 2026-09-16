@@ -38,38 +38,45 @@ jobs:
           npm ci
           npm run build
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: ${{ secrets.FTP_SERVER_DIR }}
-          # Never overwrite production .env; skip local/dev-only paths
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/.github/**
-            **/.env
-            **/.env.*
-            **/node_modules/**
-            **/tests/**
-            **/phpunit.xml
-            **/.phpunit.result.cache
-            **/.editorconfig
-            **/README.md
-            **/Homestead.json
-            **/Homestead.yaml
-            **/auth.json
-            **/.vscode/**
-            **/.idea/**
-            **/storage/logs/**
-            **/storage/framework/cache/data/**
-            **/storage/framework/sessions/**
-            **/storage/framework/views/**
-            **/storage/pail/**
+      - name: Deploy via rsync
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
+          SSH_APP_DIR: ${{ secrets.SSH_APP_DIR }}
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq sshpass rsync
 
-      # Needs SSH enabled on the host. Runs only pending migrations (does not drop DB).
+          # Incremental sync over SSH (much faster than FTP after the first run).
+          # Protects .env and runtime storage from --delete.
+          sshpass -p "$SSH_PASSWORD" rsync -az --delete \
+            -e "ssh -p 22 -o StrictHostKeyChecking=accept-new" \
+            --exclude '.git/' \
+            --exclude '.github/' \
+            --exclude '.env' \
+            --exclude '.env.*' \
+            --exclude 'node_modules/' \
+            --exclude 'tests/' \
+            --exclude 'phpunit.xml' \
+            --exclude '.phpunit.result.cache' \
+            --exclude '.editorconfig' \
+            --exclude 'README.md' \
+            --exclude 'Homestead.json' \
+            --exclude 'Homestead.yaml' \
+            --exclude 'auth.json' \
+            --exclude '.vscode/' \
+            --exclude '.idea/' \
+            --filter 'P .env' \
+            --filter 'P .env.*' \
+            --filter 'P storage/logs/***' \
+            --filter 'P storage/framework/cache/***' \
+            --filter 'P storage/framework/sessions/***' \
+            --filter 'P storage/framework/views/***' \
+            --filter 'P storage/app/***' \
+            --filter 'P storage/pail/***' \
+            ./ "${SSH_USERNAME}@${SSH_HOST}:${SSH_APP_DIR}/"
+
       - name: Run migrations
         uses: appleboy/ssh-action@v1.2.2
         with:

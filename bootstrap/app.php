@@ -14,11 +14,15 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
+            'permission' => \App\Http\Middleware\EnsureUserHasPermission::class,
+            'gbs.cors' => \App\Http\Middleware\HandleGbsCors::class,
         ]);
         
-        // Exclude Flutterwave webhook from CSRF verification
+        // Exclude Flutterwave webhook and cross-origin ticket API from CSRF
         $middleware->validateCsrfTokens(except: [
             'payment/webhook',
+            'api/tickets/*',
+            'payment/initialize',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

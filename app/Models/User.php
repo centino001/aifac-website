@@ -22,6 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'is_admin',
+        'is_super_admin',
+        'permissions',
     ];
 
     /**
@@ -45,14 +47,84 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_super_admin' => 'boolean',
+            'permissions' => 'array',
         ];
     }
 
     /**
-     * Check if user is an admin
+     * Can access the admin panel at all.
      */
     public function isAdmin(): bool
     {
-        return $this->is_admin;
+        return (bool) $this->is_admin;
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->isAdmin() && (bool) $this->is_super_admin;
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function permissionKeys(): array
+    {
+        return array_keys(config('admin_permissions', []));
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function getPermissionsList(): array
+    {
+        if ($this->isSuperAdmin()) {
+            return $this->permissionKeys();
+        }
+
+        return array_values(array_intersect(
+            $this->permissionKeys(),
+            $this->permissions ?? []
+        ));
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        if (! $this->isAdmin()) {
+            return false;
+        }
+
+        // Profile is always available to admin users.
+        if ($permission === 'profile') {
+            return true;
+        }
+
+        if ($this->isSuperAdmin()) {
+            return true;
+        }
+
+        return in_array($permission, $this->permissions ?? [], true);
+    }
+
+    public function defaultAdminPath(): string
+    {
+        $permissions = config('admin_permissions', []);
+
+        foreach ($permissions as $key => $meta) {
+            if ($this->hasPermission($key)) {
+                return $meta['path'];
+            }
+        }
+
+        return '/admin/profile';
+    }
+
+    public function roleLabel(): string
+    {
+        if ($this->isSuperAdmin()) {
+            return 'Super Admin';
+        }
+
+        return 'Staff';
     }
 }

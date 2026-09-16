@@ -209,4 +209,14 @@ class Payment extends Model
     {
         return $query->where('donation_type', 'project');
     }
+
+    public function ticket()
+    {
+        return $this->hasOne(Ticket::class);
+    }
+
+    public function isTicket(): bool
+    {
+        return $this->donation_type === 'ticket';
+    }
 }

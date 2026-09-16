@@ -37,6 +37,10 @@
             <!-- Donation Modals -->
             @include('components.donation-type-modal')
             @include('components.payment-details-modal')
+
+            <!-- Summit Ticket Modals -->
+            @include('components.ticket-type-modal')
+            @include('components.ticket-details-modal')
         </div>
 
         @livewireScripts
@@ -215,6 +219,8 @@
         document.addEventListener('DOMContentLoaded', function() {
             const donationModal = document.getElementById('donationTypeModal');
             const paymentModal = document.getElementById('paymentDetailsModal');
+            const ticketTypeModal = document.getElementById('ticketTypeModal');
+            const ticketDetailsModal = document.getElementById('ticketDetailsModal');
             
             if (donationModal) {
                 donationModal.addEventListener('click', function(e) {
@@ -231,7 +237,153 @@
                     }
                 });
             }
+
+            if (ticketTypeModal) {
+                ticketTypeModal.addEventListener('click', function(e) {
+                    if (e.target === ticketTypeModal) {
+                        closeTicketTypeModal();
+                    }
+                });
+            }
+
+            if (ticketDetailsModal) {
+                ticketDetailsModal.addEventListener('click', function(e) {
+                    if (e.target === ticketDetailsModal) {
+                        closeTicketDetailsModal();
+                    }
+                });
+            }
         });
+
+        // ── Summit ticket purchase flow ─────────────────────────────────
+        const summitTicketCatalog = @json(config('summit.tickets'));
+        let currentTicketType = null;
+
+        function animateModalOpen(modal, content) {
+            if (!modal || !content) return;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            setTimeout(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function animateModalClose(modal, content, onClosed) {
+            if (!modal || !content) return;
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+                if (typeof onClosed === 'function') onClosed();
+            }, 300);
+        }
+
+        function openTicketTypeModal() {
+            animateModalOpen(
+                document.getElementById('ticketTypeModal'),
+                document.getElementById('ticketTypeModalContent')
+            );
+        }
+
+        function closeTicketTypeModal() {
+            animateModalClose(
+                document.getElementById('ticketTypeModal'),
+                document.getElementById('ticketTypeModalContent')
+            );
+        }
+
+        function selectTicketPass(ticketType) {
+            currentTicketType = ticketType;
+            closeTicketTypeModal();
+            setTimeout(() => openTicketDetailsModal(ticketType), 300);
+        }
+
+        function openTicketDetailsModal(ticketType) {
+            currentTicketType = ticketType;
+            const pass = summitTicketCatalog[ticketType];
+            const summary = document.getElementById('ticketPassSummary');
+            const amountDisplay = document.getElementById('ticketAmountDisplay');
+
+            if (pass && summary && amountDisplay) {
+                summary.textContent = pass.name + ' — ' + pass.day_label;
+                amountDisplay.textContent = '₦' + Number(pass.price).toLocaleString();
+            }
+
+            animateModalOpen(
+                document.getElementById('ticketDetailsModal'),
+                document.getElementById('ticketDetailsModalContent')
+            );
+        }
+
+        function closeTicketDetailsModal() {
+            animateModalClose(
+                document.getElementById('ticketDetailsModal'),
+                document.getElementById('ticketDetailsModalContent'),
+                () => {
+                    const form = document.getElementById('ticketDetailsForm');
+                    if (form) form.reset();
+                }
+            );
+        }
+
+        async function proceedToTicketPayment() {
+            const form = document.getElementById('ticketDetailsForm');
+            const btn = document.getElementById('ticketProceedBtn');
+            if (!form || !currentTicketType) return;
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const formData = new FormData(form);
+            const payload = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                type: 'ticket',
+                ticket_type: currentTicketType,
+                source: 'livewire_home',
+            };
+
+            const originalLabel = btn ? btn.textContent : '';
+            if (btn) {
+                btn.disabled = true;
+                btn.textContent = 'Initializing…';
+            }
+
+            try {
+                const csrf = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content');
+                const response = await fetch('/payment/initialize', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrf || '',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                const result = await response.json();
+
+                if (result.success && result.authorization_url) {
+                    window.location.href = result.authorization_url;
+                    return;
+                }
+
+                alert(result.message || 'Failed to start payment. Please try again.');
+            } catch (error) {
+                console.error('Ticket payment error:', error);
+                alert('An error occurred while starting payment. Please try again.');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = originalLabel || 'Proceed to Payment';
+                }
+            }
+        }
         </script>
     </body>
 </html> 

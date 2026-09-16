@@ -41,6 +41,18 @@ return [
         'encryption_key' => env('FLW_ENCRYPTION_KEY'),
         'env' => env('FLW_ENV', 'staging'),
         'log_dir' => env('FLW_LOG_DIR', 'logs'),
+        'webhook_hash' => env('FLW_SECRET_HASH'),
+        // Ticket splits: main settlement (Fidelity) keeps this flat share; subaccount (Wema) gets the rest.
+        'ticket_subaccount_id' => env('FLW_TICKET_SUBACCOUNT_ID'),
+        'ticket_main_share' => (float) env('FLW_TICKET_MAIN_SHARE', 3000),
+    ],
+
+    'gbs2026' => [
+        'url' => env('GBS2026_URL', 'http://localhost:5173'),
+        'cors_origins' => array_values(array_filter(array_map(
+            'trim',
+            explode(',', env('GBS2026_CORS_ORIGINS', 'http://localhost:5173,http://127.0.0.1:5173'))
+        ))),
     ],
 
 ];

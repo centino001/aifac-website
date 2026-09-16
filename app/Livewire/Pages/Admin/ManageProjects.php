@@ -5,12 +5,13 @@ namespace App\Livewire\Pages\Admin;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Validate;
+use App\Livewire\Concerns\AuthorizesAdminAccess;
 use App\Models\Project;
 use App\Helpers\CloudinaryHelper;
-use Illuminate\Support\Facades\Auth;
 
 class ManageProjects extends Component
 {
+    use AuthorizesAdminAccess;
     use WithFileUploads;
 
     // Form fields
@@ -38,8 +39,8 @@ class ManageProjects extends Component
 
     public function mount()
     {
-        if (!Auth::check() || !Auth::user()->isAdmin()) {
-            return redirect('/admin/login');
+        if ($redirect = $this->authorizeAdmin('projects')) {
+            return $redirect;
         }
     }
 

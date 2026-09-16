@@ -2,10 +2,23 @@
 
 namespace App\Livewire\Pages;
 
+use Illuminate\Support\Carbon;
 use Livewire\Component;
 
 class Home extends Component
 {
+    /**
+     * GBSAAC 2026 announcement banner. Shown above the hero slider until the
+     * cut-off below, after which the home page renders exactly as it did before.
+     */
+    private const SUMMIT_BANNER_ID = 'Introduction_orblrv.mp4';
+    // private const SUMMIT_BANNER_ID = 'GBSAAC_HERO_nj6piu.png';
+    private const SUMMIT_BANNER_TIMEZONE = 'Africa/Lagos';
+    private const SUMMIT_BANNER_ENDS_AT = '2026-11-02 00:00:00';
+    private const SUMMIT_TICKET_URL = '#';
+    // Explore Event points at the React microsite (local Vite or production subdomain).
+    // Buy Ticket opens an on-page modal — these constants are kept for clarity.
+
     public $currentSlide = 0;
     public $slides = [];
 
@@ -52,9 +65,27 @@ class Home extends Component
         $this->currentSlide = $index;
     }
 
+    public function summitBannerIsVisible(): bool
+    {
+        return Carbon::now(self::SUMMIT_BANNER_TIMEZONE)
+            ->lessThan(Carbon::parse(self::SUMMIT_BANNER_ENDS_AT, self::SUMMIT_BANNER_TIMEZONE));
+    }
+
+    public function summitBannerUrl(): string
+    {
+        // Use the raw mp4 delivery URL — Cloudinary f_auto/q_auto can return an
+        // empty response while the transformed asset is still being generated.
+        return 'https://res.cloudinary.com/dgsctl247/video/upload/'
+            . self::SUMMIT_BANNER_ID;
+    }
+
     public function render()
     {
-        return view('livewire.pages.home')
-            ->layout('layouts.website', ['title' => 'Home']);
+        return view('livewire.pages.home', [
+            'showSummitBanner' => $this->summitBannerIsVisible(),
+            'summitBannerUrl' => $this->summitBannerUrl(),
+            'summitTicketUrl' => self::SUMMIT_TICKET_URL,
+            'summitExploreUrl' => config('services.gbs2026.url', 'http://localhost:5173'),
+        ])->layout('layouts.website', ['title' => 'Home']);
     }
 }

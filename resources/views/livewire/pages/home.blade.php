@@ -1,4 +1,58 @@
 <div>
+    @if($showSummitBanner)
+        <!-- GBSAAC 2026 Announcement Banner (auto-hides after 1 November 2026, Lagos time) -->
+        <section class="bg-black summit-banner mb-16" wire:ignore>
+            <video
+                id="summit-banner-video"
+                class="block w-full h-auto"
+                src="{{ $summitBannerUrl }}"
+                autoplay
+                muted
+                loop
+                playsinline
+                preload="auto"
+                aria-label="The 2nd Global Biennial Summit for African Art &amp; Culture 2026 — Chasing The Wind While Losing Daylight. New Culture Studios, Ibadan. October 21 - 22, 2026"
+            ></video>
+
+            <div class="bg-black px-4 py-6 sm:py-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
+                <button type="button"
+                   onclick="openTicketTypeModal()"
+                   class="inline-flex min-w-[10.5rem] items-center justify-center bg-[#f3ead8] text-[#1a120c] px-6 py-2.5 sm:px-8 sm:py-3 text-sm sm:text-base font-semibold tracking-wide uppercase hover:bg-white transition duration-300">
+                    Buy Ticket
+                </button>
+                <a href="{{ $summitExploreUrl }}"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="inline-flex min-w-[10.5rem] items-center justify-center border border-[#f3ead8] text-[#f3ead8] px-6 py-2.5 sm:px-8 sm:py-3 text-sm sm:text-base font-semibold tracking-wide uppercase hover:bg-[#f3ead8] hover:text-[#1a120c] transition duration-300">
+                    Explore Event
+                </a>
+            </div>
+        </section>
+        <script>
+            (function () {
+                function playSummitBanner() {
+                    const video = document.getElementById('summit-banner-video');
+                    if (!video) return;
+                    video.muted = true;
+                    video.loop = true;
+                    video.playsInline = true;
+                    const attempt = video.play();
+                    if (attempt && typeof attempt.catch === 'function') {
+                        attempt.catch(() => {});
+                    }
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', playSummitBanner);
+                } else {
+                    playSummitBanner();
+                }
+
+                document.addEventListener('livewire:navigated', playSummitBanner);
+            })();
+        </script>
+    @endif
+
     <!-- Hero Multimedia Slider Section -->
     <section class="relative overflow-hidden hero-slider" style="height: 80vh; min-height: 600px;">
         <!-- Slides Container -->

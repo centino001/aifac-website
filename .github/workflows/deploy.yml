@@ -38,20 +38,31 @@ jobs:
           npm ci
           npm run build
 
+      # Password auth from GitHub runners often fails on shared hosts; use a deploy key.
+      - name: Start SSH agent
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add host to known_hosts
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p 22 -H "$SSH_HOST" >> ~/.ssh/known_hosts
+
       - name: Deploy via rsync
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
           SSH_APP_DIR: ${{ secrets.SSH_APP_DIR }}
         run: |
-          sudo apt-get update -qq
-          sudo apt-get install -y -qq sshpass rsync
+          # Use a home-relative path. "/public_html" is system root and will fail with permission denied.
+          REMOTE_DIR="${SSH_APP_DIR#/}"
+          REMOTE_DIR="${REMOTE_DIR%/}"
 
-          # Incremental sync over SSH (much faster than FTP after the first run).
-          # Protects .env and runtime storage from --delete.
-          sshpass -p "$SSH_PASSWORD" rsync -az --delete \
-            -e "ssh -p 22 -o StrictHostKeyChecking=accept-new" \
+          rsync -az --delete \
+            -e "ssh -p 22" \
             --exclude '.git/' \
             --exclude '.github/' \
             --exclude '.env' \
@@ -75,16 +86,18 @@ jobs:
             --filter 'P storage/framework/views/***' \
             --filter 'P storage/app/***' \
             --filter 'P storage/pail/***' \
-            ./ "${SSH_USERNAME}@${SSH_HOST}:${SSH_APP_DIR}/"
+            ./ "${SSH_USERNAME}@${SSH_HOST}:${REMOTE_DIR}/"
 
       - name: Run migrations
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script_stop: true
           script: |
-            cd "${{ secrets.SSH_APP_DIR }}"
+            APP_DIR="${{ secrets.SSH_APP_DIR }}"
+            APP_DIR="${APP_DIR#/}"
+            cd "$APP_DIR"
             php artisan migrate --force

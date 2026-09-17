@@ -48,8 +48,14 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq sshpass rsync
 
-          REMOTE_DIR="${SSH_APP_DIR#/}"
-          REMOTE_DIR="${REMOTE_DIR%/}"
+          # Paths must be relative to the SSH home (e.g. public_html).
+          # Absolute /var/www/... paths fail on chrooted shared hosting.
+          REMOTE_DIR="${SSH_APP_DIR%/}"
+          if [[ "$REMOTE_DIR" == /* ]]; then
+            REMOTE_DIR="$(basename "$REMOTE_DIR")"
+          fi
+
+          echo "Deploying to remote dir: ${REMOTE_DIR}"
 
           sshpass -e rsync -az --delete \
             -e "ssh -p 22 -o StrictHostKeyChecking=accept-new -o PreferredAuthentications=password -o PubkeyAuthentication=no" \
@@ -88,6 +94,9 @@ jobs:
           script_stop: true
           script: |
             APP_DIR="${{ secrets.SSH_APP_DIR }}"
-            APP_DIR="${APP_DIR#/}"
+            APP_DIR="${APP_DIR%/}"
+            case "$APP_DIR" in
+              /*) APP_DIR="$(basename "$APP_DIR")" ;;
+            esac
             cd "$APP_DIR"
             php artisan migrate --force

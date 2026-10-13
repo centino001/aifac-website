@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('payment_id')->constrained('payments')->cascadeOnDelete();
             $table->string('code', 32)->unique();
-            $table->string('ticket_type', 16); // full | day_2
+            $table->string('ticket_type', 16); // full | day_2 | student | stage_play
             $table->string('attendee_name');
             $table->string('attendee_email');
             $table->string('attendee_phone', 40);

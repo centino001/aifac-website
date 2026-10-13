@@ -42,7 +42,7 @@ class TicketConfirmation extends Mailable
             with: [
                 'ticket' => $this->ticket,
                 'qrUrl' => $this->ticket->qrImageUrl(280),
-                'stubColor' => $this->ticket->ticket_type === Ticket::TYPE_DAY_2 ? '#f5c518' : '#e85d04',
+                'stubColor' => $this->ticket->stubColor(),
             ],
         );
     }

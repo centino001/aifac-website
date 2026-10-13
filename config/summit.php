@@ -38,6 +38,25 @@ return [
                 'Artistic and cultural encounters',
             ],
         ],
+        'student' => [
+            'name' => 'Student Pass',
+            'price' => 20000,
+            'day_label' => 'October 21–22, 2026',
+            'includes' => [
+                'Access to the stage play',
+                'Lunch on Summit Day 2',
+                'Conversation Circles',
+            ],
+        ],
+        'stage_play' => [
+            'name' => 'Stage Play Ticket',
+            'price' => 5000,
+            'day_label' => 'October 21st, 5PM',
+            'includes' => [
+                'Admission to The Beginning, directed by Rufus Nwoko',
+                'For guests interested only in the stage play',
+            ],
+        ],
     ],
 
 ];

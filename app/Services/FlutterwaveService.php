@@ -44,11 +44,12 @@ class FlutterwaveService
                 // Never trust client-supplied amounts for tickets.
                 $paymentData['amount'] = (float) $ticketConfig['price'];
 
-                $subaccountId = config('services.flutterwave.ticket_subaccount_id');
-                $mainShare = (float) config('services.flutterwave.ticket_main_share', 3000);
+                [$subaccountId, $mainShare, $subaccountEnvKey] = $this->ticketSplitConfig($ticketType);
 
                 if (! $subaccountId) {
-                    Log::error('Ticket payment split missing FLW_TICKET_SUBACCOUNT_ID');
+                    Log::error("Ticket payment split missing {$subaccountEnvKey}", [
+                        'ticket_type' => $ticketType,
+                    ]);
 
                     return [
                         'success' => false,
@@ -60,6 +61,7 @@ class FlutterwaveService
                     Log::error('Ticket amount too low for configured main share', [
                         'amount' => $paymentData['amount'],
                         'main_share' => $mainShare,
+                        'ticket_type' => $ticketType,
                     ]);
 
                     return [
@@ -138,13 +140,16 @@ class FlutterwaveService
             ];
 
             // Donations settle fully to the primary account (Fidelity).
-            // Tickets: primary keeps a flat share; the configured subaccount (Wema) gets the remainder.
+            // Tickets: primary keeps a flat share; the selected subaccount gets the remainder.
+            // Stage play: New Culture Studios subaccount with main share 0 (100% to that account).
             if ($isTicket) {
+                [$subaccountId, $mainShare] = $this->ticketSplitConfig($ticketType);
+
                 $payload['subaccounts'] = [
                     [
-                        'id' => config('services.flutterwave.ticket_subaccount_id'),
+                        'id' => $subaccountId,
                         'transaction_charge_type' => 'flat',
-                        'transaction_charge' => (float) config('services.flutterwave.ticket_main_share', 3000),
+                        'transaction_charge' => $mainShare,
                     ],
                 ];
             }
@@ -345,6 +350,28 @@ class FlutterwaveService
                 'error' => $e->getMessage(),
             ];
         }
+    }
+
+    /**
+     * Resolve Flutterwave subaccount + flat main share for a ticket type.
+     *
+     * @return array{0: ?string, 1: float, 2: string} [subaccountId, mainShare, envKeyForLogs]
+     */
+    protected function ticketSplitConfig(?string $ticketType): array
+    {
+        if ($ticketType === Ticket::TYPE_STAGE_PLAY) {
+            return [
+                config('services.flutterwave.stage_play_subaccount_id'),
+                (float) config('services.flutterwave.stage_play_main_share', 0),
+                'FLW_STAGE_PLAY_SUBACCOUNT_ID',
+            ];
+        }
+
+        return [
+            config('services.flutterwave.ticket_subaccount_id'),
+            (float) config('services.flutterwave.ticket_main_share', 3000),
+            'FLW_TICKET_SUBACCOUNT_ID',
+        ];
     }
 
     /**

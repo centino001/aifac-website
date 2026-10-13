@@ -1,6 +1,6 @@
 <!-- Ticket Pass Selection Modal -->
 <div id="ticketTypeModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-black border border-gray-700 rounded-lg max-w-2xl w-full mx-4 my-8 transform transition-all duration-300 scale-95 opacity-0" id="ticketTypeModalContent">
+    <div class="bg-black border border-gray-700 rounded-lg max-w-4xl w-full mx-4 my-8 transform transition-all duration-300 scale-95 opacity-0" id="ticketTypeModalContent">
         <div class="flex items-center justify-between p-6 border-b border-gray-700">
             <div>
                 <h3 class="text-xl font-semibold text-[#f3ead8]">Choose Your Pass</h3>

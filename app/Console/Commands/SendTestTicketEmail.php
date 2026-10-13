@@ -9,14 +9,20 @@ use Illuminate\Console\Command;
 
 class SendTestTicketEmail extends Command
 {
-    protected $signature = 'tickets:send-test {email} {--type=full : full or day_2}';
+    protected $signature = 'tickets:send-test {email} {--type=full : full, day_2, student, or stage_play}';
 
     protected $description = 'Generate a sample paid ticket and email the e-ticket via Resend';
 
     public function handle(TicketMailService $mailer): int
     {
-        $type = $this->option('type') === 'day_2' ? 'day_2' : 'full';
+        $type = (string) $this->option('type');
         $email = $this->argument('email');
+
+        if (! config("summit.tickets.{$type}")) {
+            $this->error('Invalid type. Use: full, day_2, student, or stage_play');
+
+            return self::FAILURE;
+        }
 
         $payment = Payment::create([
             'reference_number' => Payment::generateReferenceNumber(),

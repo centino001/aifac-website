@@ -15,7 +15,7 @@ class EticketImageService
 {
     /**
      * Build a PNG e-ticket matching the stub + event panel layout.
-     * Day pass (₦35k) stub = yellow; Full pass (₦80k) stub = orange.
+     * Stub colors: Full orange, Day yellow, Student teal, Stage Play crimson.
      *
      * @return string Absolute path to the generated PNG
      */
@@ -25,9 +25,7 @@ class EticketImageService
         $height = 520;
         $stubWidth = 400;
 
-        $stubColor = $ticket->ticket_type === Ticket::TYPE_DAY_2
-            ? 'f5c518' // yellow — Summit Day Pass
-            : 'e85d04'; // orange — Full Summit Pass
+        $stubColor = $ticket->stubColorHex();
 
         $manager = new ImageManager(new Driver());
         $image = $manager->create($width, $height)->fill('0c0a08');
@@ -60,11 +58,12 @@ class EticketImageService
 
         $fontPath = $this->resolveFontPath();
 
-        if ($ticket->ticket_type === Ticket::TYPE_FULL) {
-            $this->drawText($image, 'FULL SUMMIT', (int) ($stubWidth / 2), 42, 26, 'ffffff', $fontPath, 'center');
-            $this->drawText($image, 'PASS', (int) ($stubWidth / 2), 72, 26, 'ffffff', $fontPath, 'center');
+        $titleLines = $ticket->stubTitleLines();
+        if (count($titleLines) === 1) {
+            $this->drawText($image, $titleLines[0], (int) ($stubWidth / 2), 55, 28, 'ffffff', $fontPath, 'center');
         } else {
-            $this->drawText($image, 'DAY PASS', (int) ($stubWidth / 2), 55, 28, 'ffffff', $fontPath, 'center');
+            $this->drawText($image, $titleLines[0], (int) ($stubWidth / 2), 42, 26, 'ffffff', $fontPath, 'center');
+            $this->drawText($image, $titleLines[1], (int) ($stubWidth / 2), 72, 26, 'ffffff', $fontPath, 'center');
         }
 
         // Admit box
@@ -102,9 +101,10 @@ class EticketImageService
         $this->drawText($image, 'GBSAAC', $panelCenterX, 200, 48, 'ffffff', $fontPath, 'center');
 
         // Pass type badge
-        $badgeLabel = $ticket->ticket_type === Ticket::TYPE_FULL ? 'FULL' : 'DAY 2';
-        $image->drawRectangle($panelCenterX - 40, 220, function ($rectangle) {
-            $rectangle->size(80, 28);
+        $badgeLabel = $ticket->badgeLabel();
+        $badgeWidth = max(80, (strlen($badgeLabel) * 10) + 24);
+        $image->drawRectangle($panelCenterX - (int) ($badgeWidth / 2), 220, function ($rectangle) use ($badgeWidth) {
+            $rectangle->size($badgeWidth, 28);
             $rectangle->background('e85d04');
         });
         $this->drawText($image, $badgeLabel, $panelCenterX, 240, 14, 'ffffff', $fontPath, 'center');

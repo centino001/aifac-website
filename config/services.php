@@ -43,8 +43,12 @@ return [
         'log_dir' => env('FLW_LOG_DIR', 'logs'),
         'webhook_hash' => env('FLW_SECRET_HASH'),
         // Ticket splits: main settlement (Fidelity) keeps this flat share; subaccount (Wema) gets the rest.
+        // Used for full, day_2, and student tickets.
         'ticket_subaccount_id' => env('FLW_TICKET_SUBACCOUNT_ID'),
         'ticket_main_share' => (float) env('FLW_TICKET_MAIN_SHARE', 3000),
+        // Stage play tickets: 100% to New Culture Studios LTD (Access Bank). Set main share to 0.
+        'stage_play_subaccount_id' => env('FLW_STAGE_PLAY_SUBACCOUNT_ID'),
+        'stage_play_main_share' => (float) env('FLW_STAGE_PLAY_MAIN_SHARE', 0),
     ],
 
     'gbs2026' => [

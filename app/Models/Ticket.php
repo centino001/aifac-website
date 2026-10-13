@@ -17,6 +17,16 @@ class Ticket extends Model
 
     public const TYPE_FULL = 'full';
     public const TYPE_DAY_2 = 'day_2';
+    public const TYPE_STUDENT = 'student';
+    public const TYPE_STAGE_PLAY = 'stage_play';
+
+    /** Stub / QR frame colors for e-ticket email + PNG. */
+    public const STUB_COLORS = [
+        self::TYPE_FULL => '#e85d04',       // orange
+        self::TYPE_DAY_2 => '#f5c518',      // yellow
+        self::TYPE_STUDENT => '#0d9488',    // teal
+        self::TYPE_STAGE_PLAY => '#9f1239', // crimson
+    ];
 
     protected $fillable = [
         'payment_id',
@@ -60,6 +70,39 @@ class Ticket extends Model
     public function dayLabel(): string
     {
         return config("summit.tickets.{$this->ticket_type}.day_label", '');
+    }
+
+    public function stubColor(): string
+    {
+        return self::STUB_COLORS[$this->ticket_type] ?? self::STUB_COLORS[self::TYPE_FULL];
+    }
+
+    /** Hex without leading # — for Intervention Image. */
+    public function stubColorHex(): string
+    {
+        return ltrim($this->stubColor(), '#');
+    }
+
+    public function stubTitleLines(): array
+    {
+        return match ($this->ticket_type) {
+            self::TYPE_FULL => ['FULL SUMMIT', 'PASS'],
+            self::TYPE_DAY_2 => ['DAY PASS'],
+            self::TYPE_STUDENT => ['STUDENT', 'PASS'],
+            self::TYPE_STAGE_PLAY => ['STAGE PLAY'],
+            default => ['SUMMIT', 'TICKET'],
+        };
+    }
+
+    public function badgeLabel(): string
+    {
+        return match ($this->ticket_type) {
+            self::TYPE_FULL => 'FULL',
+            self::TYPE_DAY_2 => 'DAY 2',
+            self::TYPE_STUDENT => 'STUDENT',
+            self::TYPE_STAGE_PLAY => 'STAGE',
+            default => 'TICKET',
+        };
     }
 
     /**

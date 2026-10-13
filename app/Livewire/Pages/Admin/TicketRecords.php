@@ -129,14 +129,30 @@ class TicketRecords extends Component
             ->where('donation_type', 'ticket')
             ->where('status', 'successful')
             ->sum('amount');
+        $paidStatuses = [Ticket::STATUS_PAID, Ticket::STATUS_CHECKED_IN];
         $fullSold = Ticket::where('ticket_type', Ticket::TYPE_FULL)
-            ->whereIn('status', [Ticket::STATUS_PAID, Ticket::STATUS_CHECKED_IN])
+            ->whereIn('status', $paidStatuses)
             ->count();
         $day2Sold = Ticket::where('ticket_type', Ticket::TYPE_DAY_2)
-            ->whereIn('status', [Ticket::STATUS_PAID, Ticket::STATUS_CHECKED_IN])
+            ->whereIn('status', $paidStatuses)
+            ->count();
+        $studentSold = Ticket::where('ticket_type', Ticket::TYPE_STUDENT)
+            ->whereIn('status', $paidStatuses)
+            ->count();
+        $stagePlaySold = Ticket::where('ticket_type', Ticket::TYPE_STAGE_PLAY)
+            ->whereIn('status', $paidStatuses)
             ->count();
 
-        return compact('sold', 'checkedIn', 'pending', 'revenue', 'fullSold', 'day2Sold');
+        return compact(
+            'sold',
+            'checkedIn',
+            'pending',
+            'revenue',
+            'fullSold',
+            'day2Sold',
+            'studentSold',
+            'stagePlaySold'
+        );
     }
 
     public function render()
@@ -154,6 +170,8 @@ class TicketRecords extends Component
             'revenue' => $summary['revenue'],
             'fullSold' => $summary['fullSold'],
             'day2Sold' => $summary['day2Sold'],
+            'studentSold' => $summary['studentSold'],
+            'stagePlaySold' => $summary['stagePlaySold'],
         ])->layout('layouts.admin', ['title' => 'Ticket Records']);
     }
 }

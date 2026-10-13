@@ -24,7 +24,7 @@
         </header>
 
         <main class="flex-1 p-4 lg:p-6 space-y-6 overflow-y-auto">
-            <div class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-3 lg:gap-4">
+            <div class="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-8 gap-3 lg:gap-4">
                 <div class="bg-gray-950 border border-orange-600/40 rounded-lg p-4">
                     <p class="text-xs text-gray-400">Sold</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ $sold }}</p>
@@ -49,6 +49,14 @@
                     <p class="text-xs text-gray-400">Day Pass</p>
                     <p class="text-2xl font-bold text-white mt-1">{{ $day2Sold }}</p>
                 </div>
+                <div class="bg-gray-950 border border-orange-600/40 rounded-lg p-4">
+                    <p class="text-xs text-gray-400">Student Pass</p>
+                    <p class="text-2xl font-bold text-white mt-1">{{ $studentSold }}</p>
+                </div>
+                <div class="bg-gray-950 border border-orange-600/40 rounded-lg p-4">
+                    <p class="text-xs text-gray-400">Stage Play</p>
+                    <p class="text-2xl font-bold text-white mt-1">{{ $stagePlaySold }}</p>
+                </div>
             </div>
 
             <div class="bg-gray-950 border border-orange-600/40 rounded-lg p-4 space-y-3">
@@ -72,7 +80,7 @@
                             <option value="checked_in">Checked in</option>
                         </select>
                     </div>
-                    <div class="w-full lg:w-48">
+                    <div class="w-full lg:w-56">
                         <label for="typeFilter" class="block text-sm text-gray-300 mb-1">Pass type</label>
                         <select id="typeFilter"
                                 wire:model.live="typeFilter"
@@ -80,6 +88,8 @@
                             <option value="">All passes</option>
                             <option value="full">Full Summit Pass</option>
                             <option value="day_2">Summit Day Pass</option>
+                            <option value="student">Student Pass</option>
+                            <option value="stage_play">Stage Play Ticket</option>
                         </select>
                     </div>
                     <div class="flex gap-2">

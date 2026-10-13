@@ -76,6 +76,7 @@ jobs:
             --exclude '.idea/' \
             --filter 'P .env' \
             --filter 'P .env.*' \
+            --filter 'P .htaccess' \
             --filter 'P storage/logs/***' \
             --filter 'P storage/framework/cache/***' \
             --filter 'P storage/framework/sessions/***' \

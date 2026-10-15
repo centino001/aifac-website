@@ -89,7 +89,7 @@
                             <option value="full">Full Summit Pass</option>
                             <option value="day_2">Summit Day Pass</option>
                             <option value="student">Student Pass</option>
-                            <option value="stage_play">Stage Play Ticket</option>
+                            <option value="stage_play">Stage Play Only</option>
                         </select>
                     </div>
                     <div class="flex gap-2">

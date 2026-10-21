@@ -12,6 +12,10 @@ Sosongo! Your payment was successful and your place at **The 2nd Global Biennial
 
 Your scannable e-ticket is attached to this email as a PNG. Please keep it handy (phone or print) for check-in at the entrance.
 
+@if($hasProgramme ?? false)
+The full event programme schedule is also attached as a PDF.
+@endif
+
 @if($qrUrl)
 <div style="text-align:center;margin:24px 0;">
 <img src="{{ $qrUrl }}" alt="E-Ticket QR Code" width="200" height="200" style="border:8px solid {{ $stubColor }};padding:8px;background:{{ $stubColor }};">
@@ -19,7 +23,7 @@ Your scannable e-ticket is attached to this email as a PNG. Please keep it handy
 </div>
 @endif
 
-If the attachment doesn’t open, show this QR code or your ticket code at the entrance.
+If the e-ticket attachment doesn’t open, show this QR code or your ticket code at the entrance.
 
 We look forward to welcoming you.
 

@@ -71,6 +71,13 @@ class TicketMailService
                 ];
             }
 
+            if ($mailable->programmePath && is_readable($mailable->programmePath)) {
+                $attachments[] = [
+                    'filename' => 'GBSAAC-2026-Programme.pdf',
+                    'content' => base64_encode((string) file_get_contents($mailable->programmePath)),
+                ];
+            }
+
             $fromAddress = config('mail.from.address');
             $fromName = config('mail.from.name') ?: 'GBSAAC 2026';
 

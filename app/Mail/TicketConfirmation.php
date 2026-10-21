@@ -18,6 +18,8 @@ class TicketConfirmation extends Mailable
 
     public ?string $eticketPath = null;
 
+    public ?string $programmePath = null;
+
     public function __construct(public Ticket $ticket)
     {
         try {
@@ -26,6 +28,9 @@ class TicketConfirmation extends Mailable
             report($e);
             $this->eticketPath = null;
         }
+
+        $programme = resource_path('docs/GBSAAC-2026-programme.pdf');
+        $this->programmePath = is_readable($programme) ? $programme : null;
     }
 
     public function envelope(): Envelope
@@ -43,20 +48,27 @@ class TicketConfirmation extends Mailable
                 'ticket' => $this->ticket,
                 'qrUrl' => $this->ticket->qrImageUrl(280),
                 'stubColor' => $this->ticket->stubColor(),
+                'hasProgramme' => (bool) $this->programmePath,
             ],
         );
     }
 
     public function attachments(): array
     {
-        if (! $this->eticketPath || ! is_readable($this->eticketPath)) {
-            return [];
+        $attachments = [];
+
+        if ($this->eticketPath && is_readable($this->eticketPath)) {
+            $attachments[] = Attachment::fromPath($this->eticketPath)
+                ->as('GBSAAC-2026-'.$this->ticket->code.'.png')
+                ->withMime('image/png');
         }
 
-        return [
-            Attachment::fromPath($this->eticketPath)
-                ->as('GBSAAC-2026-'.$this->ticket->code.'.png')
-                ->withMime('image/png'),
-        ];
+        if ($this->programmePath && is_readable($this->programmePath)) {
+            $attachments[] = Attachment::fromPath($this->programmePath)
+                ->as('GBSAAC-2026-Programme.pdf')
+                ->withMime('application/pdf');
+        }
+
+        return $attachments;
     }
 }

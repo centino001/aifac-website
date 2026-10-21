@@ -140,8 +140,8 @@ class FlutterwaveService
             ];
 
             // Donations settle fully to the primary account (Fidelity).
-            // Tickets: primary keeps a flat share; the selected subaccount gets the remainder.
-            // Stage play: New Culture Studios subaccount with main share 0 (100% to that account).
+            // Tickets: split to the configured subaccount (main share 0 = 100% to that subaccount).
+            // Stage play uses a different subaccount from full / day_2 / student.
             if ($isTicket) {
                 [$subaccountId, $mainShare] = $this->ticketSplitConfig($ticketType);
 
@@ -369,7 +369,7 @@ class FlutterwaveService
 
         return [
             config('services.flutterwave.ticket_subaccount_id'),
-            (float) config('services.flutterwave.ticket_main_share', 3000),
+            (float) config('services.flutterwave.ticket_main_share', 0),
             'FLW_TICKET_SUBACCOUNT_ID',
         ];
     }

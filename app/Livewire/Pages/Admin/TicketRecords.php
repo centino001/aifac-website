@@ -116,7 +116,12 @@ class TicketRecords extends Component
                         ->orWhere('code', 'like', $term);
                 });
             })
-            ->when($this->statusFilter !== '', fn (Builder $query) => $query->where('status', $this->statusFilter))
+            ->when(
+                $this->statusFilter !== '',
+                fn (Builder $query) => $query->where('status', $this->statusFilter),
+                // Default: only paid / checked-in (hide abandoned pending checkouts).
+                fn (Builder $query) => $query->whereIn('status', [Ticket::STATUS_PAID, Ticket::STATUS_CHECKED_IN]),
+            )
             ->when($this->typeFilter !== '', fn (Builder $query) => $query->where('ticket_type', $this->typeFilter));
     }
 

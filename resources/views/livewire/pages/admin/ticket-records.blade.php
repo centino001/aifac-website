@@ -74,7 +74,7 @@
                         <select id="statusFilter"
                                 wire:model.live="statusFilter"
                                 class="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-orange-500">
-                            <option value="">All statuses</option>
+                            <option value="">Paid &amp; checked in</option>
                             <option value="pending">Pending</option>
                             <option value="paid">Paid</option>
                             <option value="checked_in">Checked in</option>
